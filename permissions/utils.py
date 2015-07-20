@@ -213,33 +213,19 @@ def get_roles(user, obj=None):
         pass
 
     groups = user.groups.all()
-    groups_ids_str = ", ".join([str(g.id) for g in groups])
 
-    if groups_ids_str:
-        prrs = PrincipalRoleRelation.objects.filter(
-            Q(user_id=user.id) | Q(group_id__in=groups_ids_str), content_id=None
-        ).values("role_id")
-    else:
-        prrs = PrincipalRoleRelation.objects.filter(user_id=user.id, content_id=None).values("role_id")
-
-    role_ids = [ppr["role_id"] for ppr in prrs]
+    role_ids = list(PrincipalRoleRelation.objects.filter(
+        Q(user_id=user.id) | Q(group_id__in=groups), content_id=None
+    ).values_list('role_id', flat=True))
 
     # Local roles for user and the user's groups and all ancestors of the
     # passed object.
     while obj:
         ctype = ContentType.objects.get_for_model(obj)
 
-        if groups_ids_str:
-            prrs = PrincipalRoleRelation.objects.filter(
-                Q(user_id=user.id) | Q(group_id__in=groups_ids_str), content_id=obj.id, content_type_id=ctype.id
-            ).values("role_id")
-        else:
-            prrs = PrincipalRoleRelation.objects.filter(
-                user_id=user.id, content_id=obj.id, content_type_id=ctype.id
-            ).values("role_id")
-
-        for prr in prrs:
-            role_ids.append(prr["role_id"])
+        role_ids.extend(PrincipalRoleRelation.objects.filter(
+            Q(user_id=user.id) | Q(group_id__in=groups), content_id=obj.id, content_type_id=ctype.id
+        ).values_list('role_id', flat=True))
 
         try:
             obj = obj.get_parent_for_permissions()
