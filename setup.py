@@ -22,6 +22,8 @@ setup(
     keywords='django authorization permissions',
     author='Kai Diefenbach',
     author_email='kai.diefenbach@iqpp.de',
+    maintainer='Arnaud Grausem',
+    maintainer_email='arnaud.grausem@unistra.fr',
     url='http://www.iqpp.com',
     license='BSD',
     packages=find_packages(exclude=['ez_setup']),
