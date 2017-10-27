@@ -1,13 +1,13 @@
 from setuptools import setup, find_packages
 import os
 
-version = 'dev'
+version = '1.2.3'
 
 here = os.path.abspath(os.path.dirname(__file__))
 README = open(os.path.join(here, 'README.txt')).read()
 
 setup(
-    name='django-permissions',
+    name='django-permissions-unistra',
     version=version,
     description='Generic per-object permissions for Django',
     long_description=README,
