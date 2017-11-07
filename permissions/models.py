@@ -33,6 +33,9 @@ class Permission(models.Model):
     def __unicode__(self):
         return "%s (%s)" % (self.name, self.codename)
 
+    def __str__(self):
+        return "%s (%s)" % (self.name, self.codename)
+
 
 class ObjectPermission(models.Model):
     """Grants permission for a role and an content object (optional).
@@ -60,6 +63,9 @@ class ObjectPermission(models.Model):
     def __unicode__(self):
         return "%s / %s / %s - %s" % (self.permission.name, self.role, self.content_type, self.content_id)
 
+    def __str__(self):
+        return "%s / %s / %s - %s" % (self.permission.name, self.role, self.content_type, self.content_id)
+
 
 class ObjectPermissionInheritanceBlock(models.Model):
     """Blocks the inheritance for specific permission and object.
@@ -83,6 +89,9 @@ class ObjectPermissionInheritanceBlock(models.Model):
     def __unicode__(self):
         return "%s / %s - %s" % (self.permission, self.content_type, self.content_id)
 
+    def __str__(self):
+        return "%s / %s - %s" % (self.permission, self.content_type, self.content_id)
+
 
 class Role(models.Model):
     """A role gets permissions to do something. Principals (users and groups)
@@ -100,6 +109,9 @@ class Role(models.Model):
         ordering = ("name", )
 
     def __unicode__(self):
+        return self.name
+
+    def __str__(self):
         return self.name
 
     def add_principal(self, principal, content=None):
@@ -176,6 +188,9 @@ class PrincipalRoleRelation(models.Model):
             principal = self.group
 
         return "%s - %s" % (principal, self.role)
+
+    def __str__(self):
+        return self.__unicode__()
 
     def get_principal(self):
         """Returns the principal.
